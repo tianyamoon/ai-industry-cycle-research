@@ -1,4 +1,4 @@
-# AI技术路线与商业模式分歧资料库_第一版
+# AI技术路线与商业模式分歧资料库
 
 > 形成日期：2026-07-04  
 > 所属层级：结果层  
@@ -20,6 +20,8 @@ AI 的路线之争不只发生在 `CPO / HBM / glass / MOR`，还发生在模型
 |---|---|---|---|---|---|---|
 | GPU 通用加速 vs ASIC / TPU 定制加速 | 计算芯片 | 并行验证 | NVIDIA、Google TPU、Amazon Trainium、Microsoft Maia、Meta MTIA | 寒武纪、海光信息、国产算力服务器 | 云厂 CapEx、芯片供给、客户部署 | 定制芯片成本/生态不及 GPU，或 GPU 供给缓解 |
 | 训练 CapEx vs 推理 Opex | 云与算力运营、模型层 | 推理重要性上升，但训练仍主导高端供给 | Microsoft、Amazon、Google、Meta、OpenAI、Anthropic | AIDC、算力租赁、服务器、推理平台 | CapEx 指引、推理价格、API 调用量 | 推理收入无法覆盖基础设施折旧 |
+| 训练侧进口 GPU 有限放松 vs 推理侧国产优先 | 云与算力运营、服务器、国产算力、AIDC | 观察层新增 | Alibaba、ByteDance、DeepSeek、NVIDIA H200、国产推理平台 | 浪潮信息、工业富联、润泽科技、奥飞数据、科华数据、科士达、海光信息、中科曙光 | H200 许可、清关、实际出货、训练集群订单、推理芯片部署 | 许可久拖不落地，或推理侧重新全面回到进口 GPU，导致原有“训练边际缓和 + 推理国产优先”判断失效 |
+| 传统415/480VAC多级转换 vs 800VDC直流配电 | AIDC供配电、服务器电源、AI电力能源 | NVIDIA官方路线催化，A股处于阶段映射 | NVIDIA、Delta、Megmeet、ABB、Eaton、Schneider Electric、Siemens、Vertiv | 麦格米特、中恒电气、欧陆通、金盘科技、科华数据、科士达、中国西电、四方股份 | NVIDIA 800VDC架构页、NVIDIA 800VDC生态博客、Kyber rack路线、公司订单和收入 | 标准/安全认证推进慢；A股公司只有概念标签，无订单、客户、收入和OCF验证 |
 | HBM4 主线强化 vs 通用 DRAM / NAND 修复 | 存储链 | HBM 主线更强，通用存储为周期旁证 | SK hynix、Micron、Samsung | 澜起科技、佰维存储、长电科技、通富微电 | HBM 价格、客户绑定、产能扩张 | HBM 供给释放过快导致价格和利润回落 |
 | CoWoS / 2.5D vs panel-level / glass 路线 | 先进封装 | CoWoS/ABF 为现实主线，glass 为期权 | TSMC、ASE、Ibiden、Intel、SEMCO、TOPPAN | 兴森科技、深南电路、京东方A、莱宝高科、沃格光电 | 良率、量产、客户认证 | glass 良率、成本或生态迁移不及预期 |
 | 可插拔光模块 vs CPO / silicon photonics | 高速互联 | 短期共存 | Broadcom、Coherent、NVIDIA、Marvell | 中际旭创、新易盛、天孚通信、源杰科技、光迅科技 | 速率升级、功耗、良率、维护复杂度 | CPO 量产、热管理、维护和生态迟迟不过关 |
