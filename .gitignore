@@ -1,0 +1,16 @@
+# Local agent/runtime metadata
+/.codex/
+/.pytest_cache/
+__pycache__/
+*.py[cod]
+
+# Root-level temporary working files and scratch exports
+/.tmp*
+/.tmp*/
+/tmp/
+/tmp_*/
+/tmp_ipo_pdfs/
+/isc_*
+
+# Private research and personal portfolio material
+/private/
