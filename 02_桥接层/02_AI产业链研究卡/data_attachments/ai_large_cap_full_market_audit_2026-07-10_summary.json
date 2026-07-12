@@ -1,0 +1,13 @@
+{
+  "as_of_date": "2026-07-10",
+  "market_cap_source": "新浪财经全市场市值清单，腾讯行情补充新浪未覆盖的AI候选",
+  "hard_threshold_count": 1869,
+  "routed_hard_count": 654,
+  "unrouted_hard_count": 1215,
+  "boundary_review_count": 160,
+  "routed_boundary_count": 61,
+  "unrouted_boundary_count": 99,
+  "candidate_quote_supplement_count": 1,
+  "audit_record_count": 2029,
+  "coverage_note": "全市场中总市值不低于100亿元的A股必须给出AI路由结果；未在AI候选池的标的保留为待路由审计，不得静默遗漏。"
+}

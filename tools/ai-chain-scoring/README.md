@@ -18,6 +18,16 @@
 
 没有明确配置时，工具不会回退到个人机器路径或私网地址。
 
+## 全产业链百亿观察池
+
+`large_cap_observation_pool.py` 先从已有 AI 候选中生成强制观察池，再从全 A 市值清单反查所有百亿标的。全市场中尚未进入 AI 候选宇宙的标的会保留为“待路由审计”，不会被直接认定为 AI，也不会静默遗漏。
+
+```powershell
+python tools/ai-chain-scoring/large_cap_observation_pool.py --repo-root . --input <候选CSV> --output <观察池CSV> --summary <观察池摘要JSON> --market-audit-output <全市场审计CSV> --market-audit-summary <全市场审计摘要JSON> --as-of-date YYYY-MM-DD
+```
+
+规则：总市值不低于 `100亿元` 的已路由 AI 标的为强制观察；`90-100亿元` 保留边界复核。脚本在全市场市值降到边界以下前持续翻页，若显式设置分页上限而未达到边界会报错，不会输出不完整的“全市场”结果。
+
 ## 周评分闸门
 
 ```powershell

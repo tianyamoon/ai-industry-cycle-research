@@ -1,0 +1,27 @@
+{
+  "as_of_date": "2026-07-10",
+  "candidate_code_count": 1742,
+  "quote_code_count": 1742,
+  "unresolved_candidate_row_count": 140,
+  "strong_observation_count": 654,
+  "boundary_review_count": 61,
+  "market_cap_pending_count": 0,
+  "observation_pool_count": 715,
+  "coverage_note": "强制观察=总市值不低于100亿元；边界复核=90至100亿元；市值待补不得静默排除。",
+  "layer_counts": {
+    "云与算力运营": 26,
+    "供配电与温控": 28,
+    "先进封装": 11,
+    "存储链": 16,
+    "安全合规治理": 10,
+    "工具链与基础软件": 53,
+    "应用平台": 74,
+    "待二次归类": 293,
+    "数据中心与基础设施": 49,
+    "数据层": 25,
+    "晶圆制造与材料": 103,
+    "终端与具身智能": 372,
+    "计算芯片": 51,
+    "高速互联": 51
+  }
+}
