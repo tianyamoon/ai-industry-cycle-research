@@ -1,0 +1,29 @@
+{
+  "as_of_date": "2026-07-12",
+  "input_row_count": 2029,
+  "hard_pending_count": 1215,
+  "boundary_pending_count": 99,
+  "pending_total_count": 1314,
+  "hard_pending_ai_related_count": 102,
+  "hard_pending_non_ai_count": 300,
+  "hard_pending_information_insufficient_count": 813,
+  "boundary_pending_ai_related_count": 2,
+  "boundary_pending_non_ai_count": 15,
+  "boundary_pending_information_insufficient_count": 82,
+  "all_record_conclusion_counts": {
+    "AI产业链相关": 819,
+    "信息不足": 895,
+    "非AI": 315
+  },
+  "unresolved_count": 895,
+  "evidence_note": "本批为主营业务预筛，使用新浪财经公司资料中的主营业务和机构类型，证据等级=B；不作为经营验证、评分或结果层结论依据。",
+  "routing_rule": "明确直接AI产品/服务可列AI产业链相关；主营明确属于非AI行业可列非AI；泛材料、通用制造、电力与基础设施一律保留信息不足，等待年报、公告、投关或官网产品页补证。",
+  "expanded_observation_pool": {
+    "observation_pool_count": 819,
+    "strong_observation_count": 756,
+    "boundary_review_count": 63,
+    "existing_candidate_count": 715,
+    "newly_routed_l0_count": 104,
+    "coverage_note": "强制观察只表示必须进入研究视野；新路由样本为主营业务预筛L0，仍须按年报、公告、投关或产品页补证。"
+  }
+}

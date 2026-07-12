@@ -28,6 +28,16 @@ python tools/ai-chain-scoring/large_cap_observation_pool.py --repo-root . --inpu
 
 规则：总市值不低于 `100亿元` 的已路由 AI 标的为强制观察；`90-100亿元` 保留边界复核。脚本在全市场市值降到边界以下前持续翻页，若显式设置分页上限而未达到边界会报错，不会输出不完整的“全市场”结果。
 
+## 百亿待路由实填
+
+`large_cap_routing.py` 读取全市场市值路由审计 CSV，使用公司资料中的主营业务与机构类型完成三类预筛：`AI产业链相关 / 非AI / 信息不足`。它不读取概念热度或新闻标题；泛材料、通用制造、电力与基础设施没有直接产品依据时保留为“信息不足”。公司资料属于 `B` 级预筛，只用于 `L0` 防漏和观察池扩容，不用于经营验证、评分或结果层结论。
+
+可选的 `--observation-output` 与 `--observation-summary` 会把既有 AI 候选和本批“AI产业链相关”标的合并为当前观察池。`--profile-cache` 可复用上一轮分流 CSV 的主营业务快照，避免重复访问来源站。
+
+```powershell
+python tools/ai-chain-scoring/large_cap_routing.py --repo-root . --input <全市场审计CSV> --output <路由实填CSV> --summary <路由实填摘要JSON> --observation-output <当前观察池CSV> --observation-summary <当前观察池摘要JSON> --as-of-date YYYY-MM-DD
+```
+
 ## 周评分闸门
 
 ```powershell
