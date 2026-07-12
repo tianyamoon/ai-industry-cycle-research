@@ -98,8 +98,8 @@
 
 新增配套入口：
 
-1. [AI全景细分样本宇宙总表_第一版](</F:/股票/ai-industry-cycle-research/02_桥接层/02_AI产业链研究卡/AI全景细分样本宇宙总表.md>)（唯一执行入口）
-2. [AI全景细分空白审计表_第一版](</F:/股票/ai-industry-cycle-research/02_桥接层/02_AI产业链研究卡/AI全景细分空白审计表.md>)（从属审计入口）
+1. [AI全景细分样本宇宙总表](AI全景细分样本宇宙总表.md)（唯一执行入口）
+2. [AI全景细分空白审计表](AI全景细分空白审计表.md)（从属审计入口）
 
 验收纪律：
 
@@ -156,11 +156,12 @@
 | 机器人 / 端侧 / AI 玩具 | 端侧 Agent、机器人、AI玩具观察池 | 汇川技术、埃斯顿、绿的谐波、鸣志电器、柯力传感、拓普集团、三花智控、全球陪伴硬件样本 | 8 | 先做观察池和 BOM / ARPU，对未量产样本不得提前长期化 |
 | 阴影 / 反证 / 低纯度样本 | 鸿博股份、中贝通信 | 拓维信息、部分跨界算力转型样本、部分算力租赁高波动样本、部分玻璃基板 / TGV 题材样本、部分应用转型弱报表样本 | 9 | 不预设失败，只用于检验叙事外溢、融资结构、现金流、履约和减值风险 |
 | 半导体设备 / 制造装备 | 长川科技、盛美上海、中微公司、北方华创、华峰测控、华兴源创、中科飞测、拓荆科技、芯源微 | 华海清科、海外 ASML / SCREEN / Hanmi 旁证 | 10 | 设备样本要看订单、收入、利润、OCF 和客户验证，不只看设备国产化叙事 |
-| 半导体材料 / 硅片 / 特气 / 前驱体 | 鼎龙股份、上海新阳、安集科技、中船特气、中巨芯、沪硅产业、立昂微、有研硅、雅克科技 | 飞凯材料、TOK、JSR、Fujifilm、HOYA、Shin-Etsu、Mitsui Chemicals、ADEKA | 14 | 材料链必须拆光刻胶、CMP、特气、前驱体、硅片、掩模配套和 pellicle |
+| 半导体材料 / 硅片 / 前驱体 | 鼎龙股份、上海新阳、安集科技、沪硅产业、立昂微、有研硅、雅克科技 | 飞凯材料、南大光电、三孚股份、昊华科技、TOK、JSR、Fujifilm、HOYA、Shin-Etsu、Mitsui Chemicals、ADEKA | 14 | 材料链必须拆光刻胶、CMP、前驱体、硅片、掩模配套和 pellicle；南大光电、三孚股份、昊华科技的电子材料收入需单独回源 |
+| 电子特气 / 电子大宗气体 / 深冷 / 高纯工艺系统 | 中船特气、中巨芯、华特气体、金宏气体、广钢气体 | 和远气体、凯美特气、中泰股份、杭氧股份、正帆科技、至纯科技、柏诚股份 | 12 | 先拆电子特气、现场制气、深冷设备、气体运营和高纯厂务；新增样本先回公司官网、年报、IR，不能因氦气政策或盘面表现直接升 `L2` |
 | 全球主链样本 | NVIDIA、TSMC、SK hynix、Microsoft、Amazon、Meta、Tesla、Sony aibo、Miko | Alphabet、Oracle、Palantir、全球 AI 安全 / 开源基础软件样本待补 | 12 | 全球样本用于定义主链变量，不直接替代 A 股经营验证 |
 | 全球制造深链样本 | ASML、TOK、JSR、Fujifilm、HOYA、Shin-Etsu、Mitsui Chemicals、ADEKA、SCREEN、TOPPAN、SK hynix、Samsung Electronics、Micron、Hanmi Semiconductor、Samsung Electro-Mechanics、Ibiden、Nepes、ISC、Okins Electronics、Sumitomo Electric、Coherent、Broadcom、Intel | Applied Materials、Lam Research、KLA、Tokyo Electron、DISCO、Entegris、Resonac 等待后续补证 | 30 | 制造深链负责补全球瓶颈和路线之争，不直接抬升 A 股映射强度 |
 
-目标合计：`至少 151` 个命名样本位或观察位。
+目标合计：`至少 163` 个命名样本位或观察位。
 其中，旧第一阶段只要求形成 `96+` 个有效样本位，不要求全部达到 `S3-S4`。第三版升级后，本表中的样本包表降级为“阶段门槛与旧口径索引”，最终样本充分性以后续逐细分样本宇宙表和空白审计表为准。
 
 ---
