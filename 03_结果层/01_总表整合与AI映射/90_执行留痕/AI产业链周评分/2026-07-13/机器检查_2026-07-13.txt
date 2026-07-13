@@ -1,0 +1,19 @@
+AI产业链 2026-07-13 机器检查
+
+stage/full
+command:
+python tools/ai-chain-scoring/check_weekly_completion.py --mode stage --coverage full --week 2026-07-13 --report 03_结果层/01_总表整合与AI映射/90_执行留痕/AI产业链周评分/2026-07-13/AI产业链周评分_2026-07-13_阶段基线.md --manifest 03_结果层/01_总表整合与AI映射/90_执行留痕/AI产业链周评分/2026-07-13/AI产业链周评分_2026-07-13_完成清单.csv --project-root . --wiki-root <TRADE_SYSTEM_ROOT>
+result: PASS
+message: 阶段基线通过机器闸门，但不代表已通过正式A门槛
+
+formal/full
+command:
+python tools/ai-chain-scoring/check_weekly_completion.py --mode formal --coverage full --week 2026-07-13 --report 03_结果层/01_总表整合与AI映射/90_执行留痕/AI产业链周评分/2026-07-13/AI产业链周评分_2026-07-13_阶段基线.md --manifest 03_结果层/01_总表整合与AI映射/90_执行留痕/AI产业链周评分/2026-07-13/AI产业链周评分_2026-07-13_完成清单.csv --project-root . --wiki-root <TRADE_SYSTEM_ROOT>
+result: FAIL (expected)
+blocking summary:
+- 337 个 L4 中仅 4 个样本可信度 A，333 个未达到正式 A。
+- 本轮 12 个代表行情组跨源均为 insufficient_sources，不能形成正式 A 技术证据。
+- 当前批次将原已同步 Wiki 页显式标记为待同步；formal 模式禁止待同步。
+- 阶段报告带有“阶段基线 / formal FAIL”标识，不能作为正式周更报告。
+
+Note: <TRADE_SYSTEM_ROOT> 是运行时参数占位，不写入公开仓本机路径。

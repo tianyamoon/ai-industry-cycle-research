@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -38,7 +39,11 @@ def test_missing_base_url_fails_instead_of_using_a_private_default(
 def test_public_client_source_contains_no_private_endpoint() -> None:
     source = (TOOL_ROOT / "luna_http_client.py").read_text(encoding="utf-8")
 
-    assert "192.168.1.123" not in source
+    private_url = re.compile(
+        r"http://(?:10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.)",
+    )
+
+    assert private_url.search(source) is None
 
 
 def test_cross_source_validation_forwards_subject_arguments(

@@ -4,7 +4,7 @@ import argparse
 import csv
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 from path_config import RootResolutionError, resolve_configured_root, resolve_repo_path
@@ -19,8 +19,32 @@ FORMAL_TECH_SOURCES = {"Luna Stock MCP", "项目技术数据源"}
 REQUIRED_SAMPLE_ROLES = {"全球锚", "A股承接锚", "弹性/反证样本"}
 HIGH_CONFIDENCE_VALUES = {"high", "a", "高"}
 WIKI_SYNC_STATUSES = {"已同步", "无需同步", "待同步"}
+EXPECTED_FULL_L4_COUNT = 337
+REGISTRY_COLUMNS = [
+    "schema_version",
+    "l4_id",
+    "l1",
+    "l2",
+    "l3",
+    "l4",
+    "canonical_topic",
+    "research_coordinate",
+    "wiki_path",
+]
+L4_ID_PATTERN = re.compile(r"^AI-L4-\d{4,}$")
 
 REQUIRED_MANIFEST_COLUMNS = [
+    "schema_version",
+    "l4_id",
+    "l1",
+    "l2",
+    "l3",
+    "l4",
+    "canonical_topic",
+    "sample_id",
+    "parent_l4_id",
+    "market",
+    "ticker",
     "kind",
     "name",
     "status",
@@ -129,49 +153,6 @@ def resolve_path(raw: str, root: Path) -> Path | None:
     return root / path
 
 
-def parse_markdown_tables(path: Path) -> list[dict[str, str]]:
-    rows: list[dict[str, str]] = []
-    lines = read_text(path).splitlines()
-    i = 0
-    while i < len(lines):
-        line = lines[i].strip()
-        if not (line.startswith("|") and line.endswith("|")):
-            i += 1
-            continue
-        if i + 1 >= len(lines):
-            i += 1
-            continue
-        separator = lines[i + 1].strip()
-        if not re.match(r"^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$", separator):
-            i += 1
-            continue
-        header = [cell.strip() for cell in line.strip("|").split("|")]
-        i += 2
-        while i < len(lines):
-            row_line = lines[i].strip()
-            if not (row_line.startswith("|") and row_line.endswith("|")):
-                break
-            cells = [cell.strip() for cell in row_line.strip("|").split("|")]
-            if len(cells) < len(header):
-                cells += [""] * (len(header) - len(cells))
-            rows.append(dict(zip(header, cells)))
-            i += 1
-        continue
-    return rows
-
-
-def required_topic_cards(mapping_path: Path) -> set[str]:
-    rows = parse_markdown_tables(mapping_path)
-    cards: set[str] = set()
-    for row in rows:
-        if normalize(row.get("类型", "")) != "细分":
-            continue
-        card = normalize(row.get("规范主卡", ""))
-        if card:
-            cards.add(card)
-    return cards
-
-
 def load_manifest(path: Path) -> list[dict[str, str]]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
@@ -181,6 +162,101 @@ def load_manifest(path: Path) -> list[dict[str, str]]:
         if missing:
             raise ValueError("完成清单缺少列: " + ", ".join(missing))
         return [{key: (value or "").strip() for key, value in row.items()} for row in reader]
+
+
+def load_registry(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        if reader.fieldnames is None:
+            raise ValueError("L4 注册表没有表头")
+        missing = [column for column in REGISTRY_COLUMNS if column not in reader.fieldnames]
+        if missing:
+            raise ValueError("L4 注册表缺少列: " + ", ".join(missing))
+        return [{key: (value or "").strip() for key, value in row.items()} for row in reader]
+
+
+def format_values(values: set[str] | list[str]) -> str:
+    ordered = sorted(values)
+    preview = "、".join(ordered[:20])
+    if len(ordered) > 20:
+        preview += f" 等 {len(ordered)} 项"
+    return preview
+
+
+def validate_full_registry(
+    registry_path: Path,
+    errors: list[str],
+) -> set[str] | None:
+    if not registry_path.exists():
+        errors.append(f"L4 注册表不存在: {registry_path}")
+        return None
+    try:
+        rows = load_registry(registry_path)
+    except ValueError as exc:
+        errors.append(str(exc))
+        return None
+
+    if len(rows) != EXPECTED_FULL_L4_COUNT:
+        errors.append(f"L4 注册表必须恰好包含 337 行: 当前 {len(rows)} 行")
+
+    l4_ids = [normalize(row.get("l4_id", "")) for row in rows]
+    blank_ids = [index for index, l4_id in enumerate(l4_ids, start=2) if is_missing(l4_id)]
+    if blank_ids:
+        errors.append(f"L4 注册表 l4_id 不能为空: 第 {format_values([str(item) for item in blank_ids])} 行")
+    duplicate_ids = {l4_id for l4_id, count in Counter(l4_ids).items() if l4_id and count > 1}
+    if duplicate_ids:
+        errors.append(f"L4 注册表 l4_id 必须唯一: {format_values(duplicate_ids)}")
+    invalid_ids = {l4_id for l4_id in l4_ids if l4_id and not L4_ID_PATTERN.fullmatch(l4_id)}
+    if invalid_ids:
+        errors.append(f"L4 注册表 l4_id 格式非法: {format_values(invalid_ids)}")
+
+    coordinates = [normalize(row.get("research_coordinate", "")) for row in rows]
+    blank_coordinates = [index for index, value in enumerate(coordinates, start=2) if is_missing(value)]
+    if blank_coordinates:
+        errors.append(
+            f"L4 注册表 research_coordinate 不能为空: 第 "
+            f"{format_values([str(item) for item in blank_coordinates])} 行"
+        )
+    duplicate_coordinates = {
+        coordinate for coordinate, count in Counter(coordinates).items() if coordinate and count > 1
+    }
+    if duplicate_coordinates:
+        errors.append(f"L4 注册表 research_coordinate 必须唯一: {format_values(duplicate_coordinates)}")
+
+    return {l4_id for l4_id in l4_ids if not is_missing(l4_id)}
+
+
+def validate_manifest_identities(
+    topic_rows: list[dict[str, str]],
+    stock_rows: list[dict[str, str]],
+    registry_ids: set[str] | None,
+    coverage: str,
+    errors: list[str],
+) -> set[str]:
+    topic_ids = [normalize(row.get("l4_id", "")) for row in topic_rows]
+    topic_id_set = {l4_id for l4_id in topic_ids if not is_missing(l4_id)}
+    duplicate_topic_ids = {
+        l4_id for l4_id, count in Counter(topic_ids).items() if l4_id and count > 1
+    }
+    if duplicate_topic_ids:
+        errors.append(f"topic l4_id 重复: {format_values(duplicate_topic_ids)}")
+
+    if coverage == "full" and registry_ids is not None:
+        missing_ids = registry_ids - topic_id_set
+        unknown_ids = topic_id_set - registry_ids
+        if missing_ids:
+            errors.append(f"full 覆盖缺少 l4_id: {format_values(missing_ids)}")
+        if unknown_ids:
+            errors.append(f"topic 含未知 l4_id: {format_values(unknown_ids)}")
+
+    sample_ids = [normalize(row.get("sample_id", "")) for row in stock_rows]
+    duplicate_sample_ids = {
+        sample_id for sample_id, count in Counter(sample_ids).items() if sample_id and count > 1
+    }
+    if duplicate_sample_ids:
+        errors.append(f"stock sample_id 重复: {format_values(duplicate_sample_ids)}")
+
+    return registry_ids if coverage == "full" and registry_ids is not None else topic_id_set
 
 
 def validate_report(args: argparse.Namespace, errors: list[str]) -> str:
@@ -232,18 +308,17 @@ def validate_manifest(args: argparse.Namespace, errors: list[str], warnings: lis
     if len(stock_rows) < args.min_stock_rows:
         errors.append(f"个股清单行数不足: {len(stock_rows)} < {args.min_stock_rows}")
 
+    registry_ids: set[str] | None = None
     if args.coverage == "full":
-        mapping_path = project_root / "00_总控台" / "trade-system题材主卡映射表.md"
-        if not mapping_path.exists():
-            errors.append(f"题材主卡映射表不存在: {mapping_path}")
-        else:
-            required_cards = required_topic_cards(mapping_path)
-            manifest_cards = {normalize(row.get("name", "")) for row in topic_rows}
-            missing_cards = sorted(required_cards - manifest_cards)
-            if missing_cards:
-                preview = "、".join(missing_cards[:20])
-                suffix = "" if len(missing_cards) <= 20 else f" 等 {len(missing_cards)} 项"
-                errors.append(f"full 覆盖缺少题材细分: {preview}{suffix}")
+        registry_path = resolve_repo_path(args.registry, project_root)
+        registry_ids = validate_full_registry(registry_path, errors)
+    valid_parent_ids = validate_manifest_identities(
+        topic_rows,
+        stock_rows,
+        registry_ids,
+        args.coverage,
+        errors,
+    )
 
     topic_roles: dict[str, set[str]] = defaultdict(set)
     for index, row in enumerate(rows, start=2):
@@ -261,6 +336,8 @@ def validate_manifest(args: argparse.Namespace, errors: list[str], warnings: lis
         if status not in STATUSES:
             errors.append(f"{prefix} {name}: status 非法: {status}")
             continue
+        if is_missing(row.get("schema_version", "")):
+            errors.append(f"{prefix} {name}: schema_version 不能为空")
         validate_wiki_sync(
             row,
             index,
@@ -278,15 +355,26 @@ def validate_manifest(args: argparse.Namespace, errors: list[str], warnings: lis
         if confidence not in CONFIDENCE_VALUES:
             errors.append(f"{prefix} {name}: sample_confidence 非法: {confidence}")
 
+        if kind == "topic":
+            if is_missing(row.get("l4_id", "")):
+                errors.append(f"{prefix} {name}: topic 行必须填写 l4_id")
         if kind == "stock":
             parent_topic = normalize(row.get("parent_topic", ""))
+            parent_l4_id = normalize(row.get("parent_l4_id", ""))
+            sample_id = normalize(row.get("sample_id", ""))
             sample_role = normalize(row.get("sample_role", ""))
             if is_missing(parent_topic):
                 errors.append(f"{prefix} {name}: stock 行必须填写 parent_topic")
+            if is_missing(parent_l4_id):
+                errors.append(f"{prefix} {name}: stock 行必须填写 parent_l4_id")
+            elif parent_l4_id not in valid_parent_ids:
+                errors.append(f"{prefix} {name}: stock parent_l4_id 不在 L4 注册表中: {parent_l4_id}")
+            if is_missing(sample_id):
+                errors.append(f"{prefix} {name}: stock 行必须填写 sample_id")
             if is_missing(sample_role):
                 errors.append(f"{prefix} {name}: stock 行必须填写 sample_role")
             else:
-                topic_roles[parent_topic].add(sample_role)
+                topic_roles[parent_l4_id].add(sample_role)
 
         if status == "已评分":
             validate_scored_row(
@@ -482,7 +570,8 @@ def validate_formal_requirements(
 
     for row in topic_rows:
         name = normalize(row.get("name", ""))
-        prefix = f"正式A门槛 {name}"
+        l4_id = normalize(row.get("l4_id", ""))
+        prefix = f"正式A门槛 {name} ({l4_id})"
         if normalize(row.get("status", "")) != "已评分":
             errors.append(f"{prefix}: formal 模式下 topic 状态必须为 已评分")
         if not is_truthy(row.get("has_global_anchor", "")):
@@ -497,17 +586,22 @@ def validate_formal_requirements(
             errors.append(f"{prefix}: formal 模式下 technical_source 必须来自 Luna Stock MCP 或项目技术数据源")
         validate_formal_technical_fields(row, prefix)
 
-        roles = topic_roles.get(name)
-        if roles:
-            missing_roles = sorted(REQUIRED_SAMPLE_ROLES - roles)
-            if missing_roles:
-                errors.append(f"{prefix}: parent_topic 关联的 stock 样本角色不完整: {'、'.join(missing_roles)}")
+        roles = topic_roles.get(l4_id, set())
+        missing_roles = sorted(REQUIRED_SAMPLE_ROLES - roles)
+        if missing_roles:
+            errors.append(
+                f"{prefix}: parent_l4_id 关联的 stock 样本角色不完整: {'、'.join(missing_roles)}"
+            )
 
     for row in stock_rows:
         name = normalize(row.get("name", ""))
         prefix = f"正式A门槛 stock {name}"
         if is_missing(row.get("parent_topic", "")):
             errors.append(f"{prefix}: formal 模式下 stock 行必须填写 parent_topic")
+        if is_missing(row.get("parent_l4_id", "")):
+            errors.append(f"{prefix}: formal 模式下 stock 行必须填写 parent_l4_id")
+        if is_missing(row.get("sample_id", "")):
+            errors.append(f"{prefix}: formal 模式下 stock 行必须填写 sample_id")
         if is_missing(row.get("sample_role", "")):
             errors.append(f"{prefix}: formal 模式下 stock 行必须填写 sample_role")
         if normalize(row.get("technical_source", "")) not in FORMAL_TECH_SOURCES:
@@ -522,6 +616,7 @@ def main() -> int:
     parser.add_argument("--week", required=True)
     parser.add_argument("--report", required=True)
     parser.add_argument("--manifest", required=True)
+    parser.add_argument("--registry", default="00_总控台/AI产业链L4注册表.csv")
     parser.add_argument("--project-root")
     parser.add_argument("--wiki-root")
     parser.add_argument("--min-topic-rows", type=int, default=1)

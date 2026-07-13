@@ -1,0 +1,40 @@
+{
+  "schema_version": "1",
+  "as_of": "2026-07-13",
+  "purpose": "AI产业链阶段重评分的公开可审计证据摘要",
+  "market_data": {
+    "source": "Luna Stock MCP HTTP structuredContent",
+    "actual_source": "tencent",
+    "fallback_used": false,
+    "confidence": "high",
+    "cross_source_status": "insufficient_sources",
+    "formal_A_technical_evidence_ready": false
+  },
+  "group_metrics": {
+    "存储": {"return_5d_median_pct": -23.43, "above_ma20": "0/3", "stage_delta": -2},
+    "先进封装": {"return_20d_median_pct": 28.57, "return_60d_median_pct": 80.81, "above_ma20": "2/3", "stage_delta": 1},
+    "高速互联": {"return_20d_median_pct": -3.57, "above_ma20": "0/3", "stage_delta": -1},
+    "服务器": {"return_20d_median_pct": 47.75, "above_ma20": "3/3", "stage_delta": 1},
+    "供配电": {"return_20d_median_pct": -10.42, "return_60d_median_pct": -19.36, "above_ma20": "0/3", "stage_delta": -2},
+    "液冷": {"return_5d_median_pct": -11.52, "return_60d_median_pct": -16.85, "above_ma20": "0/3", "stage_delta": -2},
+    "IDC": {"return_20d_median_pct": 7.53, "return_60d_median_pct": -19.05, "stage_delta": 0},
+    "半导体设备": {"return_20d_median_pct": 34.44, "return_60d_median_pct": 118.46, "above_ma20": "4/5", "stage_delta": 0},
+    "AI应用": {"return_20d_median_pct": 4.30, "return_60d_median_pct": -13.12, "stage_delta": 0}
+  },
+  "operating_evidence": [
+    {
+      "company": "紫光股份",
+      "announcement_date": "2026-07-11",
+      "evidence_level": "S",
+      "net_profit_yoy_pct_range": [83.5, 122.89],
+      "deducted_net_profit_yoy_pct_range": [44.02, 80.69],
+      "scoring_scope": "AI服务器",
+      "delta": {"evidence_delta": 1},
+      "caveat": "非经常性收益和收购结构因素不能全部归因为AI经营。"
+    }
+  ],
+  "next_window_candidates": [
+    "北京君正", "生益科技", "生益电子", "沪电股份", "深南电路", "亨通光电", "华天科技", "华勤技术", "中国软件"
+  ],
+  "candidate_rule": "以上公告官方披露日期为2026-07-14，不计入2026-07-13收盘评分。"
+}

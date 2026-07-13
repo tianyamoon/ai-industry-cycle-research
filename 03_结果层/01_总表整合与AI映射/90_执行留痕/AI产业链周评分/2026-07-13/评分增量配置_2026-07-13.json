@@ -1,0 +1,38 @@
+{
+  "schema_version": "1",
+  "as_of": "2026-07-13",
+  "evidence_path": "03_结果层/01_总表整合与AI映射/90_执行留痕/AI产业链周评分/2026-07-13/AI产业链证据增量_2026-07-13.md",
+  "formal_A_technical_evidence_ready": false,
+  "rules": [
+    {"match": {"l2": "存储链"}, "technical_delta": -2, "reason": "存储组级高位回撤，0/3 样本在 MA20 上方"},
+    {"match": {"l2": "先进封装链"}, "technical_delta": 1, "reason": "先进封装保持相对强度，但仅作拥挤下的阶段加分"},
+    {"match": {"l2": "高速互联链"}, "technical_delta": -1, "reason": "高速互联高位分化，20 日转弱且 0/3 在 MA20 上方"},
+    {"match": {"l2": "AI 服务器"}, "evidence_delta": 1, "technical_delta": 1, "reason": "紫光股份正式预告支持服务器经营路径，组级趋势仍强"},
+    {"match": {"l2": "供配电层"}, "technical_delta": -2, "reason": "供配电未确认接力，20 日和 60 日组级走弱"},
+    {"match": {"l2": "散热与温控层"}, "technical_delta": -2, "reason": "液冷/温控组级趋势转弱，缺少经营扩散"},
+    {
+      "match": {"l4_id": "AI-L4-0019"},
+      "evidence_delta": 3,
+      "technical_delta": 3,
+      "reason": "承接 2026-07-08 晶圆制造设备局部补证与样本锚点纠偏",
+      "technical_override": {
+        "technical_source": "Luna Stock MCP",
+        "technical_tool": "get_kline; validate_cross_source",
+        "technical_arguments": "2026-07-08: 长川科技、盛美上海、中微公司、华峰测控；月线/周线/乖离率",
+        "technical_structured_ready": "是",
+        "technical_actual_source": "tencent",
+        "technical_fallback_used": "否",
+        "technical_confidence": "high",
+        "technical_warnings": "可比较源不足；仅阶段技术证据",
+        "technical_cross_source_validated": "是",
+        "technical_cross_source_ok": "否"
+      }
+    }
+  ],
+  "stock_overrides": [
+    {"name": "长川科技", "parent_l4_id": "AI-L4-0019", "score": 68, "sample_role": "A股承接锚", "sample_reason": "设备利润兑现主锚", "blocker_type": "中报 OCF 与营运项目待补；高位乖离偏大"},
+    {"name": "盛美上海", "parent_l4_id": "AI-L4-0019", "score": 63, "sample_role": "弹性/反证样本", "sample_reason": "订单强化补强位", "blocker_type": "订单到收入、利润和现金流传导待补；高乖离"},
+    {"name": "中微公司", "parent_l4_id": "AI-L4-0019", "score": 63, "sample_role": "观察样本", "sample_reason": "设备平台旁证", "blocker_type": "OCF、应收、存货与在建工程待连续验证"},
+    {"name": "华峰测控", "parent_l4_id": "AI-L4-0019", "score": 62, "sample_role": "观察样本", "sample_reason": "测试设备补位与资本周期观察", "blocker_type": "OCF、存货与募投研发兑现待补；高乖离"}
+  ]
+}
